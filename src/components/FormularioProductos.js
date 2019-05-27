@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class Productos extends Component {
+export default class FormularioProductos extends Component {
 
     agregarProducto() {
     }
