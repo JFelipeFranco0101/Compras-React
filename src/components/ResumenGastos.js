@@ -1,11 +1,13 @@
 import React from 'react'
 
-export default function ResumenGastos() {
+export default function ResumenGastos(lstProductos) {
+    console.log('Entro en el compoente ResumenGastos', lstProductos);
+    console.log('Cantidad de registros', lstProductos.productos.length);
     return (
         <React.Fragment>
             <h4 className="d-flex justify-content-between align-items-center mb-3">
                 <span className="text-muted">Resumen de Productos</span>
-                <span className="badge badge-secondary badge-pill">3</span>
+                <span className="badge badge-secondary badge-pill">{lstProductos.productos.length}</span>
             </h4>
             <ul className="list-group mb-3">
                 <li className="list-group-item d-flex justify-content-between lh-condensed">

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 export default class Productos extends Component {
-    
+
     lstProductos = [];
 
     constructor(props) {
@@ -9,9 +9,10 @@ export default class Productos extends Component {
         this.state = {
             nombreProducto: '',
             detalleProducto: '',
-            valorProdcuto: ''
+            valorProducto: ''
         };
         
+        this.baseState = this.state;
         this.handleInputChange = this.handleInputChange.bind(this);
         this.agregarProducto = this.agregarProducto.bind(this);
     };
@@ -25,16 +26,22 @@ export default class Productos extends Component {
         () => console.log(this.state));
     }
 
-    agregarProducto() {
+    agregarProducto = () => {
         this.lstProductos.push(this.state);
-        console.log(this.lstProductos);
+        this.props.agregarProducto(this.lstProductos);
+        
+        this.limpiarFormulario();
+    }
+
+    limpiarFormulario = () => {
+        this.setState(this.baseState);
     }
 
     render() {
         return (
             <React.Fragment>
                 <h4 className="mb-3">Billing address</h4>
-                <form>
+                <form id="fomulario">
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <label htmlFor="nombreProducto">Nombre Producto: </label>
@@ -71,12 +78,12 @@ export default class Productos extends Component {
                             <input
                                 className="form-control"
                                 id="valorProducto"
-                                name="valorProdcuto"
+                                name="valorProducto"
                                 onChange={this.handleInputChange}
                                 placeholder=""
                                 required
                                 type="text" 
-                                value={this.state.valorProdcuto} />
+                                value={this.state.valorProducto} />
                             <div className="invalid-feedback">
                                 Valid last name is required.
                             </div>
