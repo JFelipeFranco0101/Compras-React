@@ -1,4 +1,5 @@
 import React from 'react'
+import './HeaderGastos.css'
 
 export default function HeaderGastos({titulo, year}) {
     return (
