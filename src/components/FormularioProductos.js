@@ -1,6 +1,29 @@
 import React, { Component } from 'react'
 
-export default class FormularioProductos extends Component {
+export default class Productos extends Component {
+    
+    lstProductos = [];
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            nombreProducto: '',
+            detalleProducto: '',
+            valorProdcuto: ''
+        };
+        
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.agregarProducto = this.agregarProducto.bind(this);
+    };
+
+
+    handleInputChange(event) {
+        const name = event.target.name;
+        this.setState({
+            [name]: event.target.value
+        },
+        () => console.log(this.state));
+    }
 
     agregarProducto() {
         this.lstProductos.push(this.state);
