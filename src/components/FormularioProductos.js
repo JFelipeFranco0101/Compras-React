@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { ToastsContainer, ToastsStore, ToastsContainerPosition } from 'react-toasts';
 
 export default class Productos extends Component {
 
@@ -11,8 +12,8 @@ export default class Productos extends Component {
             detalleProducto: '',
             valorProducto: ''
         };
-        
-        this.baseState = this.state;
+
+        this.baseState = { ...this.state };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.agregarProducto = this.agregarProducto.bind(this);
     };
@@ -23,18 +24,43 @@ export default class Productos extends Component {
         this.setState({
             [name]: event.target.value
         },
-        () => console.log(this.state));
+            (_) => _);
     }
 
     agregarProducto = () => {
-        this.lstProductos.push(this.state);
-        this.props.agregarProducto(this.lstProductos);
-        
-        this.limpiarFormulario();
+        if (this.formularioValido()) {
+            this.lstProductos.push(this.state);
+            this.props.agregarProducto(this.lstProductos);
+            this.limpiarFormulario();
+            ToastsStore.success('El producto de agrego correctamente', 3000);
+        }
     }
 
     limpiarFormulario = () => {
         this.setState(this.baseState);
+    }
+
+    formularioValido = () => {
+        const expreg = {
+            decimal: /^[0-9]+([,][0-9]+)?$/,
+            alfanumerico: /^([a-zA-Z0-9 _-]+)$/
+        };
+
+        if (this.state.nombreProducto === '' || this.state.detalleProducto === '' || this.state.valorProducto === '') {
+            ToastsStore.error('Todos los campos marcados con * son obligatorios', 3000);
+            return false;
+        } else if (!expreg.alfanumerico.test(this.state.nombreProducto)) {
+            ToastsStore.error(`El texto: "${this.state.nombreProducto}" no es alfanumerico`, 3000);
+            return false;
+        } else if (!expreg.alfanumerico.test(this.state.detalleProducto)) {
+            ToastsStore.error(`El texto: "${this.state.detalleProducto}" no es alfanumerico`, 3000);
+            return false;
+        } else if (!expreg.decimal.test(this.state.valorProducto)) {
+            ToastsStore.error(`El valor: "${this.state.valorProducto}" no es decimal`, 3000);
+            return false;
+        }
+
+        return true;
     }
 
     render() {
@@ -44,7 +70,7 @@ export default class Productos extends Component {
                 <form id="fomulario">
                     <div className="row">
                         <div className="col-md-6 mb-3">
-                            <label htmlFor="nombreProducto">Nombre Producto: </label>
+                            <label htmlFor="nombreProducto"><span className="text-danger">*</span>Nombre Producto: </label>
                             <input
                                 className="form-control"
                                 id="nombreProducto"
@@ -54,12 +80,9 @@ export default class Productos extends Component {
                                 required
                                 type="text"
                                 value={this.state.nombreProducto} />
-                            <div className="invalid-feedback">
-                                Valid first name is required.
-                            </div>
                         </div>
                         <div className="col-md-6 mb-3">
-                            <label htmlFor="detalleProducto">Detalle Producto: </label>
+                            <label htmlFor="detalleProducto"><span className="text-danger">*</span>Detalle Producto: </label>
                             <input
                                 className="form-control"
                                 id="detalleProducto"
@@ -67,14 +90,11 @@ export default class Productos extends Component {
                                 onChange={this.handleInputChange}
                                 placeholder=""
                                 required
-                                type="text" 
+                                type="text"
                                 value={this.state.detalleProducto} />
-                            <div className="invalid-feedback">
-                                Valid last name is required.
-                            </div>
                         </div>
                         <div className="col-md-12 mb-3">
-                            <label htmlFor="valorProducto">Valor Producto: </label>
+                            <label htmlFor="valorProducto"><span className="text-danger">*</span>Valor Producto: </label>
                             <input
                                 className="form-control"
                                 id="valorProducto"
@@ -82,17 +102,15 @@ export default class Productos extends Component {
                                 onChange={this.handleInputChange}
                                 placeholder=""
                                 required
-                                type="text" 
+                                type="text"
                                 value={this.state.valorProducto} />
-                            <div className="invalid-feedback">
-                                Valid last name is required.
-                            </div>
                         </div>
                     </div>
 
                     <hr className="mb-4" />
                     <button type="button" className="btn btn-primary btn-lg btn-block" onClick={this.agregarProducto}>Agregar</button>
                 </form>
+                <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.TOP_LEFT} lightBackground />
             </React.Fragment>
         )
     }

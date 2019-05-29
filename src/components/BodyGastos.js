@@ -9,9 +9,7 @@ export default class BodyGastos extends Component {
     }
 
     handletGetValueForm = (productos) => {
-        console.log("Ooh yeah", productos);
         this.setState({ productos });
-        console.log(this.state);
     }
 
     render() {
